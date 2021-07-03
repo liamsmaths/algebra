@@ -3,6 +3,7 @@ import { Table } from "antd";
 import styled from "@emotion/styled";
 import Text from "antd/lib/typography/Text";
 import axios from "axios";
+import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
 
 const StyledTable = styled(Table)`
   table {
@@ -57,8 +58,8 @@ const MyTopics = () => {
   const columns = [
     {
       title: "Algebra Topic",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "topic",
+      key: "topic",
     },
     {
       title: "Total Attempts",
@@ -79,6 +80,15 @@ const MyTopics = () => {
       title: "Passed",
       dataIndex: "has_passed",
       key: "has_passed",
+      render: (has_passed: any) => (
+        <React.Fragment>
+          {has_passed ? (
+            <CheckOutlined style={{ color: "green" }} />
+          ) : (
+            <CloseOutlined style={{ color: "red" }} />
+          )}
+        </React.Fragment>
+      ),
     },
   ];
 
