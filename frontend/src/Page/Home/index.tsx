@@ -2,7 +2,6 @@ import React from "react";
 import styled from "@emotion/styled";
 import StudentDashboard from "../StudentDashboard";
 import HeaderComponent from "../../Components/Header";
-import LoginPage from "../Login";
 
 const Wrapper = styled("div")`
   background: #f4f8f9;

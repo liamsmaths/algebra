@@ -3,6 +3,7 @@ import "./App.css";
 import LoginPage from "./Page/Login";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Home from "./Page/Home";
+import PracticeBoard from "./Page/PracticeBoard";
 
 function App() {
   return (
@@ -13,6 +14,9 @@ function App() {
         </Route>
         <Route path="/home" exact>
           <Home />
+        </Route>
+        <Route path="/practiceboard" exact>
+          <PracticeBoard />
         </Route>
       </BrowserRouter>
     </React.Fragment>

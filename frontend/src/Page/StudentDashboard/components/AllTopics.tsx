@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Table } from "antd";
+import { Table, Button } from "antd";
 import styled from "@emotion/styled";
 import Text from "antd/lib/typography/Text";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const StyledTable = styled(Table)`
   table {
@@ -42,6 +43,14 @@ const Details = styled("div")`
 
 const AllTopics = () => {
   const [allTopics, setAllTopics] = useState<any>();
+  const history = useHistory();
+
+  const handleTryOut = (id: any) => {
+    history.push({
+      pathname: "/practiceboard",
+      state: { id: id },
+    });
+  };
 
   const columns = [
     {
@@ -53,6 +62,16 @@ const AllTopics = () => {
       title: "Published Date",
       dataIndex: "published",
       key: "published",
+    },
+    {
+      title: "Published Date",
+      dataIndex: "id",
+      key: "id",
+      render: (record: any) => (
+        <React.Fragment>
+          <Button onClick={() => handleTryOut(record)}>Try it out</Button>
+        </React.Fragment>
+      ),
     },
   ];
 
