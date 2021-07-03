@@ -5,8 +5,8 @@ from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.http import HttpResponse, JsonResponse
-from main.models import Student, Topic, Question
-from .serializers import LoginSerializer, QuestionSerializer, RegisterSerializer, TopicSerializer
+from main.models import Student, StudentTopic, Topic, Question
+from .serializers import LoginSerializer, QuestionSerializer, RegisterSerializer, StudentTopicSerializer, TopicSerializer
 from importlib import util
 import io
 from django.views.decorators.csrf import csrf_exempt
@@ -69,6 +69,7 @@ def login(request):
             if student:
                 checkPassword = check_password(password, student.password)
                 if checkPassword:
+                    request.session['user'] = student.id
                     encoded = jwt.encode({
                         'id': student.id,
                         'email': student.email,
@@ -104,19 +105,32 @@ def GetAllTopics(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@api_view()
+def GetMyTopics(request):
+    qs = StudentTopic.objects.all().count()
+    if(qs <= 0):
+        error_message = {
+            'msg': 'No data.'
+        }
+        return JsonResponse(error_message, status=200)
+    student = request.session.get('user')
+    topics = StudentTopic.objects.all().filter(student=student)
+    serializer = StudentTopicSerializer(topics, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 def GetQuestion(request, id):
 
-    qs = Topic.objects.filter(id=id)
+    qs = Topic.objects.get(id=id)
     algo = get_module(qs.algorithm.name, qs.algorithm.path)
     rand_question = algo.get_question()
     rand_answer = algo.get_answer()
-    rand_hints = algo.get_hint()
-
+    rand_instruction = algo.get_instruction()
     question = Question(
         topic=qs,
         title=rand_question,
-        hints=rand_hints,
-        answer=rand_answer
+        answer=rand_answer,
+        instructions=rand_instruction
     )
     question.save()
     serializer = QuestionSerializer(question)
