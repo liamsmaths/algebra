@@ -2,11 +2,16 @@ import React from "react";
 import MyTopics from "./components/MyTopics";
 import AllTopics from "./components/AllTopics";
 import { Tabs } from "antd";
+import styled from "@emotion/styled";
 const { TabPane } = Tabs;
+
+const Wrapper = styled.div`
+  padding-top: 40px;
+`;
 
 const StudentDashboard = () => {
   return (
-    <React.Fragment>
+    <Wrapper>
       <Tabs type="card">
         <TabPane tab="All Topics" key="2">
           <AllTopics />
@@ -15,7 +20,7 @@ const StudentDashboard = () => {
           <MyTopics />
         </TabPane>
       </Tabs>
-    </React.Fragment>
+    </Wrapper>
   );
 };
 export default StudentDashboard;
