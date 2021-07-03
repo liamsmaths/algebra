@@ -39,7 +39,6 @@ class Question(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
     title = models.CharField(max_length=120)
     answer = models.CharField(max_length=120)
-    hints = models.TextField()
     instructions = models.TextField()
 
     def __str__(self):
@@ -55,4 +54,4 @@ class StudentTopic(models.Model):
     last_attempt = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.student.name) + " " + str(self.topic.title)
+        return str(self.student.name) + " " + str(self.topic.name)
