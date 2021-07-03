@@ -31,9 +31,6 @@ const Home = () => {
         <StudentDashboard />
       </BodyContainer>
     </Wrapper>
-    // <React.Fragment>
-    //   <LoginPage/>
-    // </React.Fragment>
   );
 };
 export default Home;

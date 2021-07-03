@@ -2,20 +2,11 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { Checkbox, Col, Form, Input, notification, Row, Typography, Button } from "antd";
 import { useForm } from "antd/lib/form/Form";
-
-// import ActionButton from "../../../components/ActionButton";
+import axios from "axios";
 import logo from "../../../image/login.jpg";
+import { useHistory } from "react-router-dom";
 
 const { Title, Text } = Typography;
-
-const StyledLogoContainer = styled(Row)`
-  margin-bottom: 1.5em;
-`;
-
-const StyledLogo = styled("img")`
-  font-size: 1.5em;
-  font-weight: 500;
-`;
 
 const StyledLoginForm = styled(Col)`
   box-shadow: -3px 18px 35px rgba(0, 0, 0, 0.12);
@@ -68,28 +59,46 @@ const StyledCheckbox = styled(Checkbox)`
     }
   }
 `;
-const StyledLink = styled("a")`
-  color: #20a0da !important;
-`;
 
 function LoginForm(props: SignUpFormProps) {
   const [form] = useForm();
-  const { setAnimation, animation } = props;
+  const history = useHistory();
+  const handleLogin = async (values: any) => {
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/login", {
+        email: values.email,
+        password: values.password,
+      });
+      history.push("/home");
+      notification.open({
+        message: "Log In Success",
+        description: "You have successfully logged in",
+        duration: 2,
+      });
+    } catch (e) {
+      notification.open({
+        message: "Log In Failed",
+        description: "Incorrect email or password",
+        duration: 2,
+      });
+    }
+  };
 
   useEffect(() => {}, []);
   return (
     <StyledLoginForm>
       <div>
-        <StyledLogoContainer>
-          {/* <Col>
-            <StyledLogo src={logo} />
-          </Col> */}
-        </StyledLogoContainer>
         <Title style={{ fontSize: "1.5em" }}>Log In</Title>
         <Text style={{ fontSize: "15px", marginBottom: "0.9em", display: "block" }}>
           Log in with your data that you entered during registration.
         </Text>
-        <StyledForm form={form} layout="vertical" size="large" hideRequiredMark>
+        <StyledForm
+          form={form}
+          layout="vertical"
+          size="large"
+          hideRequiredMark
+          onFinish={handleLogin}
+        >
           <Form.Item
             label="Username"
             name="email"
@@ -104,97 +113,13 @@ function LoginForm(props: SignUpFormProps) {
           >
             <StyledPassword type="password" placeholder="enter your password" />
           </Form.Item>
-          {/* <Form.Item name="rememberMe" valuePropName="checked" noStyle>
-            <StyledCheckbox>Keep me logged in</StyledCheckbox>
-          </Form.Item> */}
+
           <Row justify="center" align="middle">
             <Col span={24}>
-              {/* <ActionButton
-                size="large"
-                style={{
-                  width: "100%",
-                  background: "169af4",
-                  borderRadius: "8px",
-                  fontSize: "1em",
-                  border: " 1px solid #30a3e2a1",
-                }}
-                url="/api/v1.1/Account/SignIn"
-                onSuccess={(response: any) => {
-                  notification.open({
-                    message: "Success",
-                    description: "You have successfully logged in",
-                    duration: 2,
-                  });
-                  const currentUser = form.getFieldsValue();
-                  if (currentUser.rememberMe === true) {
-                    localStorage.setItem("loggedUsername", currentUser.email);
-                    localStorage.setItem("loggedPassword", currentUser.password);
-                  }
-                  if (currentUser.rememberMe === undefined) {
-                    localStorage.setItem("loggedUsername", "");
-                    localStorage.setItem("loggedPassword", "");
-                  }
-                  localStorage.setItem("current", response.data.data.userId);
-                  localStorage.setItem("token", response.data.data.token);
-                  localStorage.setItem("loggedIn", currentUser.rememberMe);
-
-                  const user: any = jwt(response.data.data.token);
-                  const roleFunction = (role: any) => {
-                    switch (role) {
-                      case "Super Admin":
-                        return "superAdmin";
-                      case "Mentor Admin":
-                        return "mentorAdmin";
-                      case "Candidate Admin":
-                        return "candidateAdmin";
-                      case "Account":
-                        return "account";
-                      default:
-                        return "superAdmin";
-                    }
-                  };
-                  let role = roleFunction(user.roles);
-                  history.push(routes[role].navRoutes[0].path);
-                }}
-                onError={() => {
-                  notification.open({
-                    message: "Error",
-                    description: "Email Or Password is incorrect",
-                    placement: "topLeft",
-                    duration: 2,
-                  });
-                }}
-                onSubmit={({ setFormData, setIsReady }: any) => {
-                  form
-                    .validateFields()
-                    .then((values) => {
-                      const { email, password } = values;
-                      setFormData({
-                        userName: email,
-                        password,
-                        rememberMe: true,
-                      });
-                      setIsReady(true);
-                    })
-                    .catch((errorInfo) => {
-                      console.log(errorInfo.message);
-                      setIsReady(false);
-                    });
-                }}
-              >
+              <Button type="primary" htmlType="submit">
                 Log In
-              </ActionButton> */}
-              <Button type="primary">Log In</Button>
+              </Button>
             </Col>
-          </Row>
-          <Row
-            justify="center"
-            align="middle"
-            style={{ flexDirection: "column", margin: "25px 0" }}
-          >
-            {/* <Col>
-              <StyledLink onClick={() => setAnimation(!animation)}> Forgot Pasword?</StyledLink>
-            </Col> */}
           </Row>
         </StyledForm>
       </div>
