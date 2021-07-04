@@ -9,12 +9,12 @@ class TopicSerializer(serializers.Serializer):
 
 
 class StudentTopicSerializer(serializers.ModelSerializer):
-    topic = TopicSerializer()
+    topic = serializers.StringRelatedField()
 
     class Meta:
         model = StudentTopic
         fields = ['id', 'has_passed', 'total_attempts',
-                  'time_taken', 'last_attempt', 'topic']
+                  'last_attempt', 'topic']
 
 
 # class RegisterSerializer(serializers.Serializer):
