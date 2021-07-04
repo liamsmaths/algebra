@@ -6,7 +6,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.http import HttpResponse, JsonResponse
 from main.models import Student, StudentTopic, Topic, Question
-from .serializers import LoginSerializer, QuestionSerializer, RegisterSerializer, StudentTopicSerializer, TopicSerializer
+from .serializers import EffortSeriliazer, LoginSerializer, QuestionSerializer, ResultSerializer, StudentTopicSerializer, TopicSerializer
 from importlib import util
 import io
 from django.views.decorators.csrf import csrf_exempt
@@ -92,31 +92,19 @@ def login(request):
 
 @api_view()
 def GetAllTopics(request):
-    qs = Topic.objects.all().filter(is_active=True).count()
-    print(qs)
-    if qs <= 0:
-        error_message = {
-            'msg': 'No data.'
-        }
-        return JsonResponse(error_message, status=200)
-
     topics = Topic.objects.all().filter(is_active=True)
-    serializer = TopicSerializer(topics, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    topic_serializer = TopicSerializer(topics, many=True)
 
+    id = request.session.get('user')
+    my_topics = StudentTopic.objects.filter(student=id)
+    my_topic_serializer = StudentTopicSerializer(my_topics, many=True)
 
-@api_view()
-def GetMyTopics(request):
-    qs = StudentTopic.objects.all().count()
-    if(qs <= 0):
-        error_message = {
-            'msg': 'No data.'
-        }
-        return JsonResponse(error_message, status=200)
-    student = request.session.get('user')
-    topics = StudentTopic.objects.all().filter(student=student)
-    serializer = StudentTopicSerializer(topics, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    context = {
+        'all_topics': topic_serializer.data,
+        'my_topics': my_topic_serializer.data
+    }
+    json_data = JSONRenderer().render(context)
+    return HttpResponse(json_data, content_type='application/json', status=200)
 
 
 def GetQuestion(request, id):
@@ -136,6 +124,60 @@ def GetQuestion(request, id):
     serializer = QuestionSerializer(question)
     json_data = JSONRenderer().render(serializer.data)
     return HttpResponse(json_data, content_type='application/json', status=200)
+
+
+@csrf_exempt
+def GetHelp(request, id):
+    topic = Topic.objects.get(id=id)
+    content = request.body
+    print(content)
+    input_stream = io.BytesIO(content)
+    data = JSONParser().parse(input_stream)
+    serializer = EffortSeriliazer(data=data)
+
+    algo = get_module(topic.algorithm.name, topic.algorithm.path)
+    if serializer.is_valid():
+        print(serializer.data['effort'])
+        help_text = algo.get_help(serializer.data['effort'])
+        json_data = JSONRenderer().render(help_text)
+        return HttpResponse(json_data, content_type='application/josn', status=200)
+    error_message = {
+        'msg': 'Something went wrong.'
+    }
+    json_data = JSONRenderer().render(error_message)
+    return HttpResponse(json_data, content_type='application/json', status=400)
+
+
+@csrf_exempt
+def SubmitResult(request):
+    content = request.body
+    print(content)
+    input_stream = io.BytesIO(content)
+    data = JSONParser().parse(input_stream)
+    serializer = ResultSerializer(data=data)
+
+    if serializer.is_valid():
+        student = Student.objects.get(id=request.session.get('user'))
+        topic = Topic.objects.get(id=serializer.data['topic_id'])
+        newStudentResult = StudentTopic(
+            student=student,
+            topic=topic,
+            has_passed=serializer.data['has_passed'],
+            total_attempts=serializer.data['total_attempts'],
+            time_taken=serializer.data['time_taken'],
+            # last_attempt=serializer.data['last_attempt']
+        )
+        newStudentResult.save()
+        success_message = {
+            'msg': 'Practice session ended.'
+        }
+        json_data = JSONRenderer().render(success_message)
+        return HttpResponse(json_data, content_type='application/json', status=200)
+    error_message = {
+        'msg': 'Something went wrong.'
+    }
+    json_data = JSONRenderer().render(error_message)
+    return HttpResponse(json_data, content_type='application/json', status=400)
 
 
 def get_module(name, location):

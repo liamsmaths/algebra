@@ -7,7 +7,7 @@ class AdminStudent(admin.ModelAdmin):
 
 
 class AdminTopic(admin.ModelAdmin):
-    list_display = ['id', 'name', 'is_active', 'published']
+    list_display = ['id', 'name', 'is_active', ]
     # list_filter = ['is_active', 'published']
     # search_fields = ['name']
 
