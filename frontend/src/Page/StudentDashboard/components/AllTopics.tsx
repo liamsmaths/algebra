@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Divider } from "antd";
 import styled from "@emotion/styled";
 import Text from "antd/lib/typography/Text";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
+import MyTopics from "./MyTopics";
 
 const StyledTable = styled(Table)`
   table {
@@ -41,15 +41,27 @@ const StyledTable = styled(Table)`
 const Details = styled("div")`
   padding: 10px 0px 20px 0px;
 `;
+const StyledButton = styled(Button)`
+  background: #6d60b0;
+  color: white;
+  border-radius: 5px;
+  height: 35px;
+  &:hover,
+  &:focus {
+    background: #6d60b0;
+    color: white;
+  }
+  border: none;
+`;
 
 const AllTopics = () => {
   const [allTopics, setAllTopics] = useState<any>();
   const history = useHistory();
 
-  const handleTryOut = (id: any) => {
+  const handleTryOut = (item: any) => {
     history.push({
       pathname: "/practiceboard",
-      state: { id: id },
+      state: { id: item.id, name: item.name },
     });
   };
 
@@ -59,37 +71,14 @@ const AllTopics = () => {
       dataIndex: "name",
       key: "name",
     },
+
     {
-      title: "Total Attempts",
-      dataIndex: "total_attempts",
-      key: "total_attempts",
-    },
-    {
-      title: "Passed",
-      dataIndex: "has_passed",
-      key: "has_passed",
-      render: (has_passed: any) => (
-        <React.Fragment>
-          {has_passed ? (
-            <CheckOutlined style={{ color: "green" }} />
-          ) : (
-            <CloseOutlined style={{ color: "red" }} />
-          )}
-        </React.Fragment>
-      ),
-    },
-    {
-      title: "Last Attempt",
-      dataIndex: "last_attempt",
-      key: "last_attempt",
-    },
-    {
-      title: "Published Date",
+      title: "Action",
       dataIndex: "id",
       key: "id",
-      render: (record: any) => (
+      render: (id: any, record: any) => (
         <React.Fragment>
-          <Button onClick={() => handleTryOut(record)}>Try it out</Button>
+          <StyledButton onClick={() => handleTryOut(record)}>Try it out</StyledButton>
         </React.Fragment>
       ),
     },
@@ -109,13 +98,10 @@ const AllTopics = () => {
   return (
     <React.Fragment>
       <Details>
-        <Text></Text>
+        <Divider orientation="left">All Topics</Divider>
       </Details>
-      <StyledTable
-        pagination={false}
-        dataSource={allTopics && allTopics.all_topics}
-        columns={columns}
-      />
+      <StyledTable pagination={false} dataSource={allTopics && allTopics.data} columns={columns} />
+      <MyTopics />
     </React.Fragment>
   );
 };

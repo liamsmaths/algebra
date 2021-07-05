@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table } from "antd";
+import { Table, Divider } from "antd";
 import styled from "@emotion/styled";
 import Text from "antd/lib/typography/Text";
 import axios from "axios";
@@ -47,7 +47,6 @@ const MyTopics = () => {
   const fetchAllTopics = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/api/getMyTopics");
-      console.log(response);
       setMyTopics(response);
     } catch (e) {}
   };
@@ -72,11 +71,6 @@ const MyTopics = () => {
       key: "last_attempt",
     },
     {
-      title: "Time Taken",
-      dataIndex: "time_taken",
-      key: "time_taken",
-    },
-    {
       title: "Passed",
       dataIndex: "has_passed",
       key: "has_passed",
@@ -95,7 +89,7 @@ const MyTopics = () => {
   return (
     <React.Fragment>
       <Details>
-        <Text></Text>
+        <Divider orientation="left">My Topics</Divider>
       </Details>
       <StyledTable pagination={false} dataSource={myTopics && myTopics.data} columns={columns} />
     </React.Fragment>

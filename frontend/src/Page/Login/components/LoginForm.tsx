@@ -116,7 +116,10 @@ function LoginForm(props: SignUpFormProps) {
 
           <Row justify="center" align="middle">
             <Col span={24}>
-              <Button htmlType="submit" style={{ background: "#6d60b0", color: "white" }}>
+              <Button
+                htmlType="submit"
+                style={{ background: "#6d60b0", color: "white", borderRadius: "6px" }}
+              >
                 Log In
               </Button>
             </Col>
