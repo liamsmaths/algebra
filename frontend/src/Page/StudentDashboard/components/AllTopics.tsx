@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import Text from "antd/lib/typography/Text";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
 
 const StyledTable = styled(Table)`
   table {
@@ -59,9 +60,28 @@ const AllTopics = () => {
       key: "name",
     },
     {
-      title: "Published Date",
-      dataIndex: "published",
-      key: "published",
+      title: "Total Attempts",
+      dataIndex: "total_attempts",
+      key: "total_attempts",
+    },
+    {
+      title: "Passed",
+      dataIndex: "has_passed",
+      key: "has_passed",
+      render: (has_passed: any) => (
+        <React.Fragment>
+          {has_passed ? (
+            <CheckOutlined style={{ color: "green" }} />
+          ) : (
+            <CloseOutlined style={{ color: "red" }} />
+          )}
+        </React.Fragment>
+      ),
+    },
+    {
+      title: "Last Attempt",
+      dataIndex: "last_attempt",
+      key: "last_attempt",
     },
     {
       title: "Published Date",
@@ -91,7 +111,11 @@ const AllTopics = () => {
       <Details>
         <Text></Text>
       </Details>
-      <StyledTable pagination={false} dataSource={allTopics && allTopics.data} columns={columns} />
+      <StyledTable
+        pagination={false}
+        dataSource={allTopics && allTopics.all_topics}
+        columns={columns}
+      />
     </React.Fragment>
   );
 };

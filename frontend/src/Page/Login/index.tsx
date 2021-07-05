@@ -11,6 +11,7 @@ const { Title, Text } = Typography;
 const StyledWrapper = styled("div")`
   background: #e9f9ff;
   // background:#F2FAFF;
+
   position: relative;
   min-height: 100vh;
 `;
@@ -44,8 +45,7 @@ const LoginPage = (props: any) => {
   `;
   const ShadeLayout = styled("div")`
     position: absolute;
-    //     background: #1dce78;
-    background: #42a7ff;
+    background: #6d60b0;
     z-index: 1000;
     width: 100%;
     left: 0;

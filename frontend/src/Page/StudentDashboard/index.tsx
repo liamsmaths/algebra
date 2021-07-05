@@ -12,14 +12,7 @@ const Wrapper = styled.div`
 const StudentDashboard = () => {
   return (
     <Wrapper>
-      <Tabs type="card">
-        <TabPane tab="All Topics" key="2">
-          <AllTopics />
-        </TabPane>
-        <TabPane tab="My Topics" key="1">
-          <MyTopics />
-        </TabPane>
-      </Tabs>
+     <AllTopics/>
     </Wrapper>
   );
 };
