@@ -1,3 +1,4 @@
+from json import JSONEncoder
 from functools import partial
 from os import stat
 from django.shortcuts import render
@@ -5,6 +6,7 @@ from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.http import HttpResponse, JsonResponse
+from rest_framework.utils import json
 from main.models import Student, StudentTopic, Topic, Question
 from .serializers import LoginSerializer, QuestionSerializer, StudentTopicSerializer, TopicSerializer
 from importlib import util
@@ -15,7 +17,7 @@ import jwt
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-
+from django.db import connection
 
 # @csrf_exempt
 # def signup(request):
@@ -92,15 +94,8 @@ def login(request):
 
 @api_view()
 def GetAllTopics(request):
-    qs = Topic.objects.all().filter(is_active=True).count()
-    print(qs)
-    if qs <= 0:
-        error_message = {
-            'msg': 'No data.'
-        }
-        return JsonResponse(error_message, status=200)
-
     topics = Topic.objects.all().filter(is_active=True)
+
     serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 

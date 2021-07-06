@@ -1,11 +1,9 @@
 from datetime import date
-from main.models import StudentTopic
+from django.db.models import query
+
+from rest_framework.relations import RelatedField
+from main.models import StudentTopic, Topic
 from rest_framework import serializers
-
-
-class TopicSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    name = serializers.CharField(max_length=120)
 
 
 class StudentTopicSerializer(serializers.ModelSerializer):
@@ -15,6 +13,24 @@ class StudentTopicSerializer(serializers.ModelSerializer):
         model = StudentTopic
         fields = ['id', 'has_passed', 'total_attempts',
                   'last_attempt', 'topic']
+
+
+class TopicRelatedField(serializers.RelatedField):
+    def to_representation(self, obj):
+        return{
+            'student_topic_id': obj.id,
+            'has_passed': obj.has_passed,
+            'total_attempts': obj.total_attempts,
+            'last_attempt': obj.last_attempt,
+        }
+
+
+class TopicSerializer(serializers.ModelSerializer):
+    student_topics = TopicRelatedField(many=True, read_only=True)
+
+    class Meta:
+        model = Topic
+        fields = ['id', 'name', 'student_topics']
 
 
 # class RegisterSerializer(serializers.Serializer):
