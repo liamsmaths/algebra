@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import Text from "antd/lib/typography/Text";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import MyTopics from "./MyTopics";
+import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
 
 const StyledTable = styled(Table)`
   table {
@@ -58,6 +58,8 @@ const AllTopics = () => {
   const [allTopics, setAllTopics] = useState<any>();
   const history = useHistory();
 
+  var currentStudentTopics: any = [];
+
   const handleTryOut = (item: any) => {
     history.push({
       pathname: "/practiceboard",
@@ -70,16 +72,37 @@ const AllTopics = () => {
       title: "Algebra Topic",
       dataIndex: "name",
       key: "name",
+      render: (name: any, record: any) => (
+        <div onClick={() => handleTryOut(record)} style={{ cursor: "pointer" }}>
+          {name}
+        </div>
+      ),
     },
-
     {
-      title: "Action",
-      dataIndex: "id",
-      key: "id",
-      render: (id: any, record: any) => (
+      title: "Passed",
+      dataIndex: "has_passed",
+      key: "has_passed",
+      render: (has_passed: any) => (
         <React.Fragment>
-          <StyledButton onClick={() => handleTryOut(record)}>Try it out</StyledButton>
+          {has_passed === null ? null : has_passed === true ? (
+            <CheckOutlined style={{ color: "green" }} />
+          ) : (
+            <CloseOutlined style={{ color: "red" }} />
+          )}
         </React.Fragment>
+      ),
+    },
+    {
+      title: "Total Attempt",
+      dataIndex: "total_attempts",
+      key: "total_attempts",
+    },
+    {
+      title: "Last Attempt",
+      dataIndex: "last_attempt",
+      key: "last_attempt",
+      render: (item: any) => (
+        <React.Fragment>{item === null ? "" : new Date(item).toLocaleDateString()}</React.Fragment>
       ),
     },
   ];
@@ -87,7 +110,7 @@ const AllTopics = () => {
   const fetchAllTopics = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/api/getAllTopics");
-      setAllTopics(response);
+      setAllTopics(response.data);
     } catch (e) {}
   };
 
@@ -95,13 +118,36 @@ const AllTopics = () => {
     fetchAllTopics();
   }, []);
 
+  const getCurrentStudentTopic = (item: any) => {
+    const currentId = item.id;
+    const currentName = item.name;
+    const currentStudent = item.student_topics.filter((item: any) => item.student_topic_id === 1);
+    const currentHasPassed = currentStudent.length > 0 ? currentStudent[0].has_passed : null;
+    const currentTotalAttempts =
+      currentStudent.length > 0 ? currentStudent[0].total_attempts : null;
+    const currentLastAttempt = currentStudent.length > 0 ? currentStudent[0].last_attempt : null;
+    const newArray: any = {
+      id: currentId,
+      name: currentName,
+      has_passed: currentHasPassed,
+      total_attempts: currentTotalAttempts,
+      last_attempt: currentLastAttempt,
+    };
+
+    currentStudentTopics.push(newArray);
+  };
+
+  allTopics &&
+    allTopics.map((item: any) => {
+      getCurrentStudentTopic(item);
+    });
+
   return (
     <React.Fragment>
       <Details>
         <Divider orientation="left">All Topics</Divider>
       </Details>
-      <StyledTable pagination={false} dataSource={allTopics && allTopics.data} columns={columns} />
-      <MyTopics />
+      <StyledTable pagination={false} dataSource={currentStudentTopics} columns={columns} />
     </React.Fragment>
   );
 };
