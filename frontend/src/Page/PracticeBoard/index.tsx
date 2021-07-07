@@ -131,6 +131,9 @@ const PracticeBoard = () => {
       setAllQuestions(response);
     } catch (e) {}
   };
+
+  const handleMenu = () => {};
+
   return (
     <Wrapper>
       <MathJax.Provider>
@@ -182,7 +185,7 @@ const PracticeBoard = () => {
 
                 <Row gutter={12} style={{ marginTop: "12px", paddingTop: "15px" }}>
                   <Col xs={24} sm={3}>
-                    <StyledButton disabled={isDisabled}>Get Help</StyledButton>
+                    <StyledButton onClick={handleMenu}>Menu</StyledButton>
                   </Col>
                   <Col xs={15} sm={4}>
                     <StyledButton disabled={isDisabled} onClick={handleCheckAnswer}>
@@ -217,7 +220,17 @@ const PracticeBoard = () => {
                       <Text style={{ fontSize: "17px" }}>{item}</Text>
                     </div>
                   ))}
-                <a>Watch Video</a>
+                {allQuestions && allQuestions.data && allQuestions.data.video_link && (
+                  <div style={{ display: "flex", justifyContent: "center", paddingTop: "6px" }}>
+                    <a
+                      href={allQuestions && allQuestions.data && allQuestions.data.video_link}
+                      target="_blank"
+                      style={{ textTransform: "uppercase", fontSize: "17px" }}
+                    >
+                      watch video
+                    </a>
+                  </div>
+                )}
               </InstructionContainer>
             </Col>
           </Row>
