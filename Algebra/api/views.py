@@ -125,7 +125,8 @@ def GetQuestion(request, id):
     context = {
         'title': rand_question,
         'answer': rand_answer,
-        'instructions': rand_instruction
+        'instructions': rand_instruction,
+        'video_link': qs.video_link
 
     }
     json_data = JSONRenderer().render(context)
