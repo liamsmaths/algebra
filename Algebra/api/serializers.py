@@ -22,6 +22,7 @@ class TopicRelatedField(serializers.RelatedField):
             'has_passed': obj.has_passed,
             'total_attempts': obj.total_attempts,
             'last_attempt': obj.last_attempt,
+            'correct_answer': obj.correct_answer
         }
 
 
@@ -44,14 +45,10 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=300)
 
 
-class QuestionSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    title = serializers.CharField(max_length=120)
-    answer = serializers.CharField(max_length=120)
-    instructions = serializers.CharField(max_length=500)
-
-
-class EffortSeriliazer(serializers.Serializer):
+class GetHelpSerializer(serializers.Serializer):
+    topic = serializers.IntegerField()
+    question = serializers.CharField(max_length=200)
+    answer = serializers.CharField(max_length=200)
     effort = serializers.CharField(max_length=200)
 
 

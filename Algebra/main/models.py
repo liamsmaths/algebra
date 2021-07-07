@@ -28,20 +28,11 @@ class Student(models.Model):
 class Topic(models.Model):
     name = models.CharField(max_length=200)
     algorithm = models.FileField(upload_to="algorithms")
+    video_link = models.CharField(max_length=200, null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
-
-
-class Question(models.Model):
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
-    title = models.CharField(max_length=120)
-    answer = models.CharField(max_length=120)
-    instructions = models.TextField()
-
-    def __str__(self):
-        return self.title
 
 
 class StudentTopic(models.Model):
@@ -49,6 +40,7 @@ class StudentTopic(models.Model):
     topic = models.ForeignKey(
         Topic, on_delete=models.CASCADE, related_name="student_topics")
     has_passed = models.BooleanField(default=False)
+    correct_answer = models.IntegerField()
     total_attempts = models.IntegerField(null=True, blank=True)
     time_taken = models.TimeField(null=True)
     last_attempt = models.DateTimeField(auto_now_add=True)

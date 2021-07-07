@@ -7,8 +7,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.http import HttpResponse, JsonResponse
 from rest_framework.utils import json
-from main.models import Student, StudentTopic, Topic, Question
-from .serializers import LoginSerializer, QuestionSerializer, StudentTopicSerializer, TopicSerializer
+from main.models import Student, StudentTopic, Topic
+from .serializers import GetHelpSerializer, LoginSerializer, StudentTopicSerializer, TopicSerializer
 from importlib import util
 import io
 from django.views.decorators.csrf import csrf_exempt
@@ -121,16 +121,39 @@ def GetQuestion(request, id):
     rand_question = algo.get_question()
     rand_answer = algo.get_answer()
     rand_instruction = algo.get_instruction()
-    question = Question(
-        topic=qs,
-        title=rand_question,
-        answer=rand_answer,
-        instructions=rand_instruction
-    )
-    question.save()
-    serializer = QuestionSerializer(question)
-    json_data = JSONRenderer().render(serializer.data)
+
+    context = {
+        'title': rand_question,
+        'answer': rand_answer,
+        'instructions': rand_instruction
+
+    }
+    json_data = JSONRenderer().render(context)
     return HttpResponse(json_data, content_type='application/json', status=200)
+
+
+@csrf_exempt
+def GetHelp(request):
+    content = request.body
+    input_stream = io.BytesIO(content)
+    data = JSONParser().parse(input_stream)
+
+    serializer = GetHelpSerializer(data=data)
+    if serializer.is_valid():
+        question = serializer.data['question']
+        answer = serializer.data['answer']
+        effort = serializer.data['effort']
+        topic = serializer.data['topic']
+
+        qs = Topic.objects.get(id=topic)
+        algo = get_module(qs.algorithm.name, qs.algorithm.path)
+        get_help = algo.get_help(question, answer, effort)
+
+        context = {
+            'get_help': get_help
+        }
+        json_data = JSONRenderer().render(context)
+        return HttpResponse(json_data, content_type='application/json', status=200)
 
 
 def get_module(name, location):
