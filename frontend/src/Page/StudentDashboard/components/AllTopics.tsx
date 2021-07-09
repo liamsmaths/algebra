@@ -66,7 +66,7 @@ const AllTopics = () => {
   const handleTryOut = (item: any) => {
     history.push({
       pathname: "/practiceboard",
-      state: { id: item.id, name: item.name },
+      state: { id: item.id, name: item.name, studentTopicId: item.student_topic_id },
     });
   };
 
@@ -131,12 +131,15 @@ const AllTopics = () => {
     const currentTotalAttempts =
       currentStudent.length > 0 ? currentStudent[0].total_attempts : null;
     const currentLastAttempt = currentStudent.length > 0 ? currentStudent[0].last_attempt : null;
+    const currentStudentTopicId =
+      currentStudent.length > 0 ? currentStudent[0].student_topic_id : null;
     const newArray: any = {
       id: currentId,
       name: currentName,
       has_passed: currentHasPassed,
       total_attempts: currentTotalAttempts,
       last_attempt: currentLastAttempt,
+      student_topic_id: currentStudentTopicId,
     };
 
     currentStudentTopics.push(newArray);
