@@ -8,7 +8,7 @@ from rest_framework.parsers import JSONParser
 from django.http import HttpResponse, JsonResponse
 from rest_framework.utils import json
 from main.models import Student, StudentTopic, Topic
-from .serializers import GetHelpSerializer, LoginSerializer, StudentTopicSerializer, TopicSerializer
+from .serializers import GetHelpSerializer, LoginSerializer, ResultSerializer, StudentTopicSerializer, TopicSerializer
 from importlib import util
 import io
 from django.views.decorators.csrf import csrf_exempt
@@ -173,3 +173,55 @@ def get_module(name, location):
 #         return render(request, 'build/index.html')
 #     else:
 #         return render(request, 'error.html')
+
+@csrf_exempt
+def SubmitResult(request):
+    content = request.body
+    input_stream = io.BytesIO(content)
+    json_data = JSONParser().parse(input_stream)
+
+    serializer = ResultSerializer(data=json_data)
+
+    if serializer.is_valid():
+        if serializer.data['student_topic_id']:
+            qs = StudentTopic.objects.get(
+                id=serializer.data['student_topic_id'])
+
+            qs.total_attempts = serializer.data['total_attempts']
+            qs.has_passed = serializer.data['has_passed']
+            qs.correct_answer = serializer.data['correct_answer']
+            qs.time_taken = serializer.data['time_taken']
+
+            qs.save()
+
+            context = {
+                'msg': 'Result has been updated.'
+            }
+            json_result = JSONRenderer().render(context)
+            return HttpResponse(json_result, content_type='application/json', status=200)
+
+        topic = Topic.objects.get(id=serializer.data['topic_id'])
+        student = Student.objects.get(id=request.session.get('user'))
+        new_student_topic = StudentTopic(
+            topic=topic,
+            student=student,
+            has_passed=serializer.data['has_passed'],
+            total_attempts=serializer.data['total_attempts'],
+            correct_answer=serializer.data['correct_answer'],
+            time_taken=serializer.data['time_taken']
+        )
+        new_student_topic.save()
+
+        context = {
+            'msg': 'Result has been added.'
+        }
+        json_result = JSONRenderer().render(context)
+        return HttpResponse(json_result, content_type='application/json', status=200)
+
+    else:
+        context = {
+            'msg': 'Some error occured.'
+        }
+
+        json_result = JSONRenderer().render(context)
+        return HttpResponse(json_result, content_type='application/json', status=400)

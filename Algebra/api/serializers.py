@@ -53,8 +53,10 @@ class GetHelpSerializer(serializers.Serializer):
 
 
 class ResultSerializer(serializers.Serializer):
+    student_topic_id = serializers.IntegerField()
     topic_id = serializers.IntegerField()
     total_attempts = serializers.IntegerField()
+    correct_answer = serializers.IntegerField()
     has_passed = serializers.BooleanField()
     #last_attempt = serializers.DateTimeField()
     time_taken = serializers.TimeField()
