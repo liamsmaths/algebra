@@ -2,7 +2,9 @@ import React from "react";
 import styled from "@emotion/styled";
 import Text from "antd/lib/typography/Text";
 import { createFromIconfontCN } from "@ant-design/icons";
-import { Popover } from "antd";
+import { Popover, Button } from "antd";
+import { useHistory } from "react-router-dom";
+import jwt from "jwt-decode";
 
 const IconFont = createFromIconfontCN({
   scriptUrl: "//at.alicdn.com/t/font_2643792_vtsize76u7.js",
@@ -16,22 +18,37 @@ const Wrapper = styled("div")`
 `;
 const DetailsWrapper = styled("div")`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 130px;
+  gap: 15px;
 `;
 
 const HeaderComponent = () => {
+  const history = useHistory();
+  const token: any = localStorage.getItem("token");
+  const user: any = jwt(token);
+  const handleLogOut = () => {
+    localStorage.removeItem("token");
+    history.push("/");
+  };
   return (
     <Wrapper>
       <Text
         style={{ fontSize: "26px", color: "white", textTransform: "uppercase", letterSpacing: 2 }}
       >
-        Algebra Topic
+        Algebra Practice
       </Text>
       <DetailsWrapper>
-        <Text style={{ fontSize: "20px", color: "white" }}>John Smith</Text>
-        <Popover placement="bottom" title="" content={<Text>Logout</Text>} trigger="click">
+        <Text style={{ fontSize: "20px", color: "white" }}>{user.name}</Text>
+        <Popover
+          placement="bottom"
+          title=""
+          content={
+            <div onClick={handleLogOut} style={{ cursor: "pointer" }}>
+              Logout
+            </div>
+          }
+          trigger="click"
+        >
           <IconFont type="icon-setting" style={{ fontSize: "20px", color: "white" }} />
         </Popover>
       </DetailsWrapper>

@@ -69,6 +69,7 @@ function LoginForm(props: SignUpFormProps) {
         email: values.email,
         password: values.password,
       });
+      localStorage.setItem("token", response.data);
       history.push("/home");
       notification.open({
         message: "Log In Success",

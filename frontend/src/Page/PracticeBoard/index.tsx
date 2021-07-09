@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import HeaderComponent from "../../Components/Header";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import axios from "axios";
 import Text from "antd/lib/typography/Text";
 import MathJax from "react-mathjax";
@@ -62,6 +62,7 @@ const PracticeBoard = () => {
   const location: any = useLocation();
   const id = location.state.id;
   const name = location.state.name;
+  const studentTopicId = location.state.studentTopicId;
   const [allQuestions, setAllQuestions] = useState<any>();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [inputAnswer, setInputAnswer] = useState("");
@@ -70,6 +71,9 @@ const PracticeBoard = () => {
   const [help, setHelp] = useState<any>();
   const [isGetHelp, setIsGetHelp] = useState<boolean>(false);
   const [correctPopover, setCorrectPopover] = useState<boolean>(false);
+  const history = useHistory();
+
+  var initialTime = performance.now();
 
   const [form] = useForm();
 
@@ -132,7 +136,23 @@ const PracticeBoard = () => {
     } catch (e) {}
   };
 
-  const handleMenu = () => {};
+  const handleMenu = async () => {
+    const finalTime = performance.now();
+    const differenceInSeconds = finalTime - initialTime;
+    const timeTaken = new Date(differenceInSeconds).toISOString().substr(11, 8);
+
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/submit", {
+        student_topic_id: studentTopicId,
+        topic_id: id,
+        total_attempts: totalAttempts,
+        correct_answer: correct,
+        has_passed: correct >= 5 ? true : false,
+        time_taken: timeTaken,
+      });
+      history.push("/home");
+    } catch (e) {}
+  };
 
   return (
     <Wrapper>
