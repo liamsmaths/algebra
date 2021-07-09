@@ -5,6 +5,7 @@ import Text from "antd/lib/typography/Text";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
+import jwt from "jwt-decode";
 
 const StyledTable = styled(Table)`
   table {
@@ -57,6 +58,8 @@ const StyledButton = styled(Button)`
 const AllTopics = () => {
   const [allTopics, setAllTopics] = useState<any>();
   const history = useHistory();
+  const token: any = localStorage.getItem("token");
+  const user: any = jwt(token);
 
   var currentStudentTopics: any = [];
 
@@ -121,7 +124,9 @@ const AllTopics = () => {
   const getCurrentStudentTopic = (item: any) => {
     const currentId = item.id;
     const currentName = item.name;
-    const currentStudent = item.student_topics.filter((item: any) => item.student_topic_id === 1);
+    const currentStudent = item.student_topics.filter(
+      (item: any) => item.student_topic_id === user.id
+    );
     const currentHasPassed = currentStudent.length > 0 ? currentStudent[0].has_passed : null;
     const currentTotalAttempts =
       currentStudent.length > 0 ? currentStudent[0].total_attempts : null;

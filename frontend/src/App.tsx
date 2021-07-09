@@ -4,11 +4,12 @@ import LoginPage from "./Page/Login";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Home from "./Page/Home";
 import PracticeBoard from "./Page/PracticeBoard";
+import MainRoute from "./router";
 
 function App() {
   return (
     <React.Fragment>
-      <BrowserRouter>
+      {/* <BrowserRouter>
         <Route path="/" exact>
           <LoginPage />
         </Route>
@@ -18,7 +19,8 @@ function App() {
         <Route path="/practiceboard" exact>
           <PracticeBoard />
         </Route>
-      </BrowserRouter>
+      </BrowserRouter> */}
+      <MainRoute />
     </React.Fragment>
   );
 }

@@ -3,6 +3,7 @@ import { Col, Row, Form, Input, Button, Typography, Checkbox } from "antd";
 import styled from "@emotion/styled";
 import LoginImage from "../../image/login.jpg";
 import LoginForm from "./components/LoginForm";
+import { useHistory } from "react-router-dom";
 
 import moment from "moment";
 
@@ -37,6 +38,12 @@ const StyledDiv = styled("div")`
 
 const LoginPage = (props: any) => {
   const [animation, setAnimation] = React.useState(false);
+  const token: any = localStorage.getItem("token");
+  const history = useHistory();
+  if (token) {
+    history.push("/home");
+    // history.goBack();
+  }
 
   const StyledContainer = styled(Row)`
     @media only screen and (max-width: 1023px) {
