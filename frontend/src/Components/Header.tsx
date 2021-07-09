@@ -35,7 +35,7 @@ const HeaderComponent = () => {
       <Text
         style={{ fontSize: "26px", color: "white", textTransform: "uppercase", letterSpacing: 2 }}
       >
-        Algebra Topic
+        Algebra Practice
       </Text>
       <DetailsWrapper>
         <Text style={{ fontSize: "20px", color: "white" }}>{user.name}</Text>
