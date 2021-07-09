@@ -129,7 +129,7 @@ const AllTopics = () => {
     const currentId = item.id;
     const currentName = item.name;
     const currentStudent = item.student_topics.filter(
-      (item: any) => item.student_topic_id === user.id
+      (item: any) => item.student_id === user.id
     );
     const currentHasPassed = currentStudent.length > 0 ? currentStudent[0].has_passed : null;
     const currentTotalAttempts =

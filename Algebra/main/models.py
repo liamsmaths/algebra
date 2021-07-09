@@ -42,7 +42,7 @@ class StudentTopic(models.Model):
     has_passed = models.BooleanField(default=False)
     correct_answer = models.IntegerField()
     total_attempts = models.IntegerField(null=True, blank=True)
-    time_taken = models.TimeField(null=True)
+    time_taken = models.CharField(max_length=200)
     last_attempt = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

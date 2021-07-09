@@ -72,8 +72,8 @@ const PracticeBoard = () => {
   const [isGetHelp, setIsGetHelp] = useState<boolean>(false);
   const [correctPopover, setCorrectPopover] = useState<boolean>(false);
   const history = useHistory();
+  const [initialTime, setInitialTime] = useState<any>();
 
-  var initialTime = performance.now();
 
   const [form] = useForm();
 
@@ -86,6 +86,7 @@ const PracticeBoard = () => {
 
   useEffect(() => {
     fetchAllQuestions();
+    setInitialTime(performance.now())
   }, []);
 
   const getHelp = async () => {
