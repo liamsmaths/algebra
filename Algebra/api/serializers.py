@@ -53,7 +53,8 @@ class GetHelpSerializer(serializers.Serializer):
 
 
 class ResultSerializer(serializers.Serializer):
-    student_topic_id = serializers.IntegerField()
+    student_topic_id = serializers.IntegerField(
+        required=False, allow_null=True)
     topic_id = serializers.IntegerField()
     total_attempts = serializers.IntegerField()
     correct_answer = serializers.IntegerField()
