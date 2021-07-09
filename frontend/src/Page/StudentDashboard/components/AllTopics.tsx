@@ -8,6 +8,9 @@ import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
 import jwt from "jwt-decode";
 
 const StyledTable = styled(Table)`
+  .ant-table table {
+    background-color: #f4f8f9;
+  }
   table {
     border-spacing: 0 10px !important;
   }
@@ -24,6 +27,7 @@ const StyledTable = styled(Table)`
   .ant-table-row {
     border-radius: 10px !important;
     box-shadow: 1px 1px 10px #1c3faa1a !important;
+    background-color: white;
   }
 
   .ant-pagination-item,
