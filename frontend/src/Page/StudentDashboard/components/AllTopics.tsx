@@ -123,11 +123,19 @@ const AllTopics = () => {
       key: "id",
       render: (id: any, record: any) => {
         if (record.correct_answer != null) {
+          if(record.correct_answer < 5){ 
           const correctAttemptPercentage = Math.round(
-            (record.correct_answer / record.total_attempts) * 100
+            (record.correct_answer / 5) * 100
           );
           return <Progress percent={correctAttemptPercentage} size="small" />;
         }
+          else{
+            const correctAttemptPercentage = 100;
+            return <Progress percent={correctAttemptPercentage} size="small" />;
+          }
+          
+        }
+      
       },
     },
   ];

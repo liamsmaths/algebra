@@ -13,6 +13,9 @@ class Student(models.Model):
     def __str__(self):
         return self.name
 
+    def __unicode__(self):
+        return self.name
+
     def save(self, *args, **kwargs):
         self.password = make_password(self.plain_password)
         super(Student, self).save(*args, **kwargs)

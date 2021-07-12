@@ -16,7 +16,7 @@ class AdminTopic(admin.ModelAdmin):
 class AdminStudentTopic(admin.ModelAdmin):
     list_display = ['id', 'student', 'topic',
                     'has_passed', 'total_attempts', 'time_taken']
-    search_fields = ['student.name', 'topic']
+    search_fields = ['student__name', 'topic__name']
     list_filter = ['has_passed']
 
 

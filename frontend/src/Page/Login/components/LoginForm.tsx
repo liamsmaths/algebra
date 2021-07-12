@@ -91,7 +91,7 @@ function LoginForm(props: SignUpFormProps) {
       <div>
         <Title style={{ fontSize: "1.5em" }}>Log In</Title>
         <Text style={{ fontSize: "15px", marginBottom: "0.9em", display: "block" }}>
-          Log in with your data that you entered during registration.
+          Log in with credentials provided by your teacher.
         </Text>
         <StyledForm
           form={form}
