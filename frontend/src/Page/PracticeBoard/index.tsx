@@ -5,7 +5,7 @@ import { useLocation, useHistory } from "react-router-dom";
 import axios from "axios";
 import Text from "antd/lib/typography/Text";
 import MathJax from "react-mathjax";
-import { Input, Button, Row, Col, Divider, Form, Popover } from "antd";
+import { Input, Button, Row, Col, Divider, Form, notification } from "antd";
 import { useForm } from "antd/lib/form/Form";
 const { TextArea } = Input;
 
@@ -72,6 +72,7 @@ const PracticeBoard = () => {
   const [isGetHelp, setIsGetHelp] = useState<boolean>(false);
   const [correctPopover, setCorrectPopover] = useState<boolean>(false);
   const history = useHistory();
+  const [disbaleCheck, setDisableCheck] = useState<boolean>(false);
 
   var initialTime = performance.now();
 
@@ -108,9 +109,27 @@ const PracticeBoard = () => {
     if (inputValue.length > 0) {
       setIsDisabled(false);
     }
+    if (inputValue.length > 0 && disbaleCheck) {
+      setIsDisabled(true);
+    }
     if (inputValue.length === 0) {
       setIsDisabled(true);
     }
+  };
+
+  const onCorrectAttempt = () => {
+    notification.success({
+      message: "Correct",
+      description: "Your answer is correct.",
+      duration: 2,
+    });
+  };
+  const onInCorrectAttempt = () => {
+    notification.error({
+      message: "Incorrect",
+      description: "Your answer is incorrect. See the help section for correct answer.",
+      duration: 2,
+    });
   };
 
   const handleCheckAnswer = () => {
@@ -124,8 +143,12 @@ const PracticeBoard = () => {
       setCorrect(correct + 1);
       setIsGetHelp(false);
       handleNextQuestion();
+      onCorrectAttempt();
     } else {
       getHelp();
+      setDisableCheck(true);
+      setIsDisabled(true);
+      onInCorrectAttempt();
     }
   };
 
@@ -133,6 +156,9 @@ const PracticeBoard = () => {
     try {
       const response = await axios.get(`http://127.0.0.1:8000/api/getQuestion/${id}`);
       setAllQuestions(response);
+      setDisableCheck(false);
+      setIsGetHelp(false);
+      form.setFieldsValue({ userinput: "" });
     } catch (e) {}
   };
 
@@ -170,12 +196,14 @@ const PracticeBoard = () => {
                       {name} :
                     </Text>
 
-                    <Text style={{ fontSize: "18px" }}>
-                      <MathJax.Node
-                        inline
-                        formula={allQuestions && allQuestions.data && allQuestions.data.title}
-                      />
-                    </Text>
+                    {allQuestions && allQuestions.data && allQuestions.data.title && (
+                      <Text style={{ fontSize: "18px" }}>
+                        <MathJax.Node
+                          inline
+                          formula={allQuestions && allQuestions.data && allQuestions.data.title}
+                        />
+                      </Text>
+                    )}
                   </div>
                 </div>
 

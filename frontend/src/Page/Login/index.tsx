@@ -151,9 +151,10 @@ const LoginPage = (props: any) => {
                 WELCOME
               </Title>
               <Text style={{ fontSize: "15px", color: "white" }}>
-                We are passionate about our clients' problems and we bring a fierce focus to get the
-                job done right, every time. By sharing our knowledge and understanding our clients'
-                businesses, we deliver the right results for them.
+                Welcome to the Algebra Guide website. This site aims to help students learn the
+                basics of algebra using videos, instructions, exercises and help when (I mean IF!)
+                you get things wrong. You only need to get 5 questions correct to complete an
+                exercise so get started and good luck!
               </Text>
             </ShadeLayout>
             <StyledImage src={LoginImage} />

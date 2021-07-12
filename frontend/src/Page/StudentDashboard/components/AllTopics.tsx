@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Divider } from "antd";
+import { Table, Button, Progress } from "antd";
 import styled from "@emotion/styled";
 import Text from "antd/lib/typography/Text";
 import axios from "axios";
@@ -18,6 +18,7 @@ const StyledTable = styled(Table)`
     border: none;
     background: none;
     padding: 0px 16px;
+    font-size: 18px;
   }
   .ant-table-tbody > tr > td {
     border: none;
@@ -70,7 +71,11 @@ const AllTopics = () => {
   const handleTryOut = (item: any) => {
     history.push({
       pathname: "/practiceboard",
-      state: { id: item.id, name: item.name, studentTopicId: item.student_topic_id },
+      state: {
+        id: item.id,
+        name: item.name,
+        studentTopicId: item.student_topic_id,
+      },
     });
   };
 
@@ -112,6 +117,19 @@ const AllTopics = () => {
         <React.Fragment>{item === null ? "" : new Date(item).toLocaleDateString()}</React.Fragment>
       ),
     },
+    {
+      title: "Progress",
+      dataIndex: "id",
+      key: "id",
+      render: (id: any, record: any) => {
+        if (record.correct_answer != null) {
+          const correctAttemptPercentage = Math.round(
+            (record.correct_answer / record.total_attempts) * 100
+          );
+          return <Progress percent={correctAttemptPercentage} size="small" />;
+        }
+      },
+    },
   ];
 
   const fetchAllTopics = async () => {
@@ -137,6 +155,7 @@ const AllTopics = () => {
     const currentLastAttempt = currentStudent.length > 0 ? currentStudent[0].last_attempt : null;
     const currentStudentTopicId =
       currentStudent.length > 0 ? currentStudent[0].student_topic_id : null;
+    const currentAnswer = currentStudent.length > 0 ? currentStudent[0].correct_answer : null;
     const newArray: any = {
       id: currentId,
       name: currentName,
@@ -144,6 +163,7 @@ const AllTopics = () => {
       total_attempts: currentTotalAttempts,
       last_attempt: currentLastAttempt,
       student_topic_id: currentStudentTopicId,
+      correct_answer: currentAnswer,
     };
 
     currentStudentTopics.push(newArray);
@@ -156,9 +176,6 @@ const AllTopics = () => {
 
   return (
     <React.Fragment>
-      <Details>
-        <Divider orientation="left">All Topics</Divider>
-      </Details>
       <StyledTable pagination={false} dataSource={currentStudentTopics} columns={columns} />
     </React.Fragment>
   );
