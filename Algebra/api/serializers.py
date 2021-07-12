@@ -22,7 +22,8 @@ class TopicRelatedField(serializers.RelatedField):
             'has_passed': obj.has_passed,
             'total_attempts': obj.total_attempts,
             'last_attempt': obj.last_attempt,
-            'correct_answer': obj.correct_answer
+            'correct_answer': obj.correct_answer,
+            'student_id': obj.student.id
         }
 
 
@@ -53,10 +54,11 @@ class GetHelpSerializer(serializers.Serializer):
 
 
 class ResultSerializer(serializers.Serializer):
-    student_topic_id = serializers.IntegerField()
+    student_topic_id = serializers.IntegerField(
+        allow_null=True)
     topic_id = serializers.IntegerField()
     total_attempts = serializers.IntegerField()
     correct_answer = serializers.IntegerField()
     has_passed = serializers.BooleanField()
     #last_attempt = serializers.DateTimeField()
-    time_taken = serializers.TimeField()
+    time_taken = serializers.CharField(max_length=200)

@@ -7,6 +7,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path('', include('main.urls')),
-    #re_path(r'^(?:.*)/?', include('main.urls')),
+    re_path(r'^(?:.*)/?', include('main.urls')),
     # path('confirm/<uidb64>/<token>', email_confirmation, name="confirm")
 ]
