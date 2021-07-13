@@ -62,3 +62,9 @@ class ResultSerializer(serializers.Serializer):
     has_passed = serializers.BooleanField()
     #last_attempt = serializers.DateTimeField()
     time_taken = serializers.CharField(max_length=200)
+
+
+class FeedbackSerializer(serializers.Serializer):
+    student_id = serializers.IntegerField()
+    topic_id = serializers.IntegerField()
+    message = serializers.CharField(max_length=999)

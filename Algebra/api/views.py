@@ -7,8 +7,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.http import HttpResponse, JsonResponse
 from rest_framework.utils import json
-from main.models import Student, StudentTopic, Topic
-from .serializers import GetHelpSerializer, LoginSerializer, ResultSerializer, StudentTopicSerializer, TopicSerializer
+from main.models import Student, StudentTopic, Topic, Feedback
+from .serializers import FeedbackSerializer, GetHelpSerializer, LoginSerializer, ResultSerializer, StudentTopicSerializer, TopicSerializer
 from importlib import util
 import io
 from django.views.decorators.csrf import csrf_exempt
@@ -239,3 +239,30 @@ def SubmitResult(request):
 
         json_result = JSONRenderer().render(context)
         return HttpResponse(json_result, content_type='application/json', status=400)
+
+
+@csrf_exempt
+def SubmitFeedback(request):
+    content = request.body
+    input_stream = io.BytesIO(content)
+    data = JSONParser().parse(input_stream)
+    serializer = FeedbackSerializer(data=data)
+
+    if serializer.is_valid():
+        student = Student.objects.get(id=serializer.data['student_id'])
+        topic = Topic.objects.get(id=serializer.data['topic_id'])
+        message = serializer.data['message']
+
+        feedback = Feedback(
+            student=student,
+            topic=topic,
+            message=message
+        )
+        feedback.save()
+        context = {'msg': 'Feedback submitted successfully.'}
+        json_data = JSONRenderer().render(context)
+        return HttpResponse(json_data, content_type='application/json', status=200)
+
+    context = {'msg': 'Error'}
+    json_data = JSONRenderer().render(context)
+    return HttpResponse(json_data, content_type='application/json', status=400)

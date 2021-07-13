@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Topic, Student, StudentTopic
+from .models import Topic, Student, StudentTopic, Feedback
 
 
 class AdminStudent(admin.ModelAdmin):
@@ -20,6 +20,12 @@ class AdminStudentTopic(admin.ModelAdmin):
     list_filter = ['has_passed']
 
 
+class AdminFeedback(admin.ModelAdmin):
+    list_display = ['id', 'student', 'topic', 'message']
+    search_fields = ['student__name', 'topic__name']
+
+
 admin.site.register(Topic, AdminTopic)
 admin.site.register(Student, AdminStudent)
 admin.site.register(StudentTopic, AdminStudentTopic)
+admin.site.register(Feedback, AdminFeedback)

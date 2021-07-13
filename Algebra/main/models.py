@@ -50,3 +50,13 @@ class StudentTopic(models.Model):
 
     def __str__(self):
         return str(self.student.name) + " " + str(self.topic.name)
+
+
+class Feedback(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    message = models.CharField(max_length=999)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.student.name) + " " + str(self.topic.name)
