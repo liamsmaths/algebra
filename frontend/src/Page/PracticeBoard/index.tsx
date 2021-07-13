@@ -1,24 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "@emotion/styled";
 import HeaderComponent from "../../Components/Header";
 import { useLocation, useHistory } from "react-router-dom";
 import axios from "axios";
 import Text from "antd/lib/typography/Text";
 import MathJax from "react-mathjax";
-import { Input, Button, Row, Col, Divider, Form, notification } from "antd";
+import { Input, Button, Row, Col, Divider, Form, notification, Modal } from "antd";
+import FeedbackComponent from "./FeedbackComponent";
 import { useForm } from "antd/lib/form/Form";
+import jwt from "jwt-decode";
 const { TextArea } = Input;
+
+const Wrapper = styled("div")`
+  background: #f4f8f9;
+  width: 100%;
+  height: 100vh;
+`;
 
 const Header = styled("div")`
   height: 100px;
   width: 100%;
   background-color: #6d60b0;
   padding: 0px 70px 0px 70px;
-`;
-const Wrapper = styled("div")`
-  background: #f4f8f9;
-  height: 100vh;
-  width: 100%;
 `;
 
 const BodyContainer = styled("div")`
@@ -63,6 +66,9 @@ const PracticeBoard = () => {
   const id = location.state.id;
   const name = location.state.name;
   const studentTopicId = location.state.studentTopicId;
+  const token: any = localStorage.getItem("token");
+  const user: any = jwt(token);
+
   const [allQuestions, setAllQuestions] = useState<any>();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [inputAnswer, setInputAnswer] = useState("");
@@ -74,6 +80,9 @@ const PracticeBoard = () => {
   const history = useHistory();
   const [disbaleCheck, setDisableCheck] = useState<boolean>(false);
   const [initialTime, setInitialTime] = useState<any>();
+  const [isFeedback, setIsFeedback] = useState<boolean>(false);
+  const [isCorrectfeedback, setIsCorrectFeedback] = useState<boolean>(false);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
 
   const [form] = useForm();
 
@@ -144,6 +153,9 @@ const PracticeBoard = () => {
       setIsGetHelp(false);
       handleNextQuestion();
       onCorrectAttempt();
+      if (correct === 5) {
+        setIsCorrectFeedback(true);
+      }
     } else {
       getHelp();
       setDisableCheck(true);
@@ -177,6 +189,20 @@ const PracticeBoard = () => {
         time_taken: timeTaken,
       });
       history.push("/home");
+    } catch (e) {}
+  };
+
+  const handleFeedbackMessage = (e: any) => {
+    setFeedbackMessage(e.target.value);
+  };
+  const handleFeedbackSubmit = async () => {
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/feedback", {
+        student_id: user.id,
+        topic_id: id,
+        message: feedbackMessage,
+      });
+      setIsCorrectFeedback(false);
     } catch (e) {}
   };
 
@@ -240,8 +266,17 @@ const PracticeBoard = () => {
                       Check Answer
                     </StyledButton>
                   </Col>
-                  <Col xs={24} sm={3}>
+                  <Col xs={24} sm={14}>
                     <StyledButton onClick={handleNextQuestion}>Next Question</StyledButton>
+                  </Col>
+                  <Col xs={24} sm={3}>
+                    <StyledButton
+                      onClick={() => {
+                        setIsFeedback(!isFeedback);
+                      }}
+                    >
+                      Feedback
+                    </StyledButton>
                   </Col>
                 </Row>
               </QuestionContainer>
@@ -280,6 +315,35 @@ const PracticeBoard = () => {
                   </div>
                 )}
               </InstructionContainer>
+
+              <Modal
+                title="Leave us your Feedback"
+                visible={isFeedback}
+                onCancel={() => setIsFeedback(false)}
+                footer={[]}
+              >
+                <FeedbackComponent topicId={id} setIsFeedback={setIsFeedback} />
+              </Modal>
+              <Modal
+                title={
+                  <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                    <Text>Congratulations !</Text>
+                    <Text style={{ fontSize: "15px" }}>
+                      You have successfully completed the target.
+                    </Text>
+                  </div>
+                }
+                visible={isCorrectfeedback}
+                onCancel={() => setIsCorrectFeedback(false)}
+                footer={[
+                  <StyledButton style={{ marginTop: "15px" }} onClick={handleFeedbackSubmit}>
+                    Submit
+                  </StyledButton>,
+                ]}
+              >
+                <Text style={{ fontSize: "15px" }}>Leave us your Feedback</Text>
+                <TextArea rows={5} style={{ marginTop: "15px" }} onChange={handleFeedbackMessage} />
+              </Modal>
             </Col>
           </Row>
         </BodyContainer>

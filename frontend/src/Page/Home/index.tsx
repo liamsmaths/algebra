@@ -5,8 +5,8 @@ import HeaderComponent from "../../Components/Header";
 
 const Wrapper = styled("div")`
   background: #f4f8f9;
-  height: 100vh;
   width: 100%;
+  height: 100vh;
 `;
 
 const Header = styled("div")`
