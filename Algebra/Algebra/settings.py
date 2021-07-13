@@ -41,7 +41,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 
-CORS_ORIGIN_ALLOW_ALL =True
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'Algebra.urls'
 
@@ -74,6 +74,26 @@ DATABASES = {
     }
 }
 
+
+# DATABASES = {
+
+#     'default': {
+
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+#         'NAME': "Algebra",
+
+#         'USER': 'postgres',
+
+#         'PASSWORD': 'root',
+
+#         'HOST': 'localhost',
+
+#         'PORT': 5432,
+
+#     }
+
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -123,7 +143,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-#Email config
+# Email config
 
 EMAIL_FROM_USER = ""
 EMAIL_HOST = "smtp.gmail.com"

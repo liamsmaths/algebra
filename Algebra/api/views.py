@@ -187,6 +187,20 @@ def SubmitResult(request):
             qs = StudentTopic.objects.get(
                 id=serializer.data['student_topic_id'])
 
+            previous_correct = qs.correct_answer
+            previous_progress = (previous_correct/5) * 100
+
+            current_correct = serializer.data['correct_answer']
+            current_progress = (current_correct/5) * 100
+
+            if previous_progress >= current_progress:
+
+                context = {
+                    'msg': 'Result has been updated.'
+                }
+                json_result = JSONRenderer().render(context)
+                return HttpResponse(json_result, content_type='application/json', status=200)
+
             qs.total_attempts = serializer.data['total_attempts']
             qs.has_passed = serializer.data['has_passed']
             qs.correct_answer = serializer.data['correct_answer']
