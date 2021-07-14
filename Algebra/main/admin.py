@@ -21,7 +21,7 @@ class AdminStudentTopic(admin.ModelAdmin):
 
 
 class AdminFeedback(admin.ModelAdmin):
-    list_display = ['id', 'student', 'topic', 'message']
+    list_display = ['id', 'student', 'topic', 'message', 'date']
     search_fields = ['student__name', 'topic__name']
 
 

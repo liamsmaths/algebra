@@ -140,6 +140,13 @@ const PracticeBoard = () => {
       duration: 2,
     });
   };
+  const onFeedbackSubmit = () => {
+    notification.success({
+      message: "Success",
+      description: "Feedback is submitted.",
+      duration: 2,
+    });
+  };
 
   const handleCheckAnswer = () => {
     setTotalAttempts(totalAttempts + 1);
@@ -147,15 +154,16 @@ const PracticeBoard = () => {
     const correctAnswerStringify = allQuestions.data.answer.toString();
 
     if (inputAnswerStringify === correctAnswerStringify) {
-      form.setFieldsValue({ userinput: "" });
+      form.setFieldsValue({ userinput: "" });      
       setCorrectPopover(true);
-      setCorrect(correct + 1);
+      setCorrect(correct + 1);   
       setIsGetHelp(false);
       handleNextQuestion();
       onCorrectAttempt();
-      if (correct === 5) {
+      if (correct === 4) {
         setIsCorrectFeedback(true);
       }
+      
     } else {
       getHelp();
       setDisableCheck(true);
@@ -194,6 +202,7 @@ const PracticeBoard = () => {
 
   const handleFeedbackMessage = (e: any) => {
     setFeedbackMessage(e.target.value);
+
   };
   const handleFeedbackSubmit = async () => {
     try {
@@ -203,6 +212,7 @@ const PracticeBoard = () => {
         message: feedbackMessage,
       });
       setIsCorrectFeedback(false);
+      onFeedbackSubmit();
     } catch (e) {}
   };
 

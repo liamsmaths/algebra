@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Input, Button } from "antd";
+import { Input, Button, notification } from "antd";
 import styled from "@emotion/styled";
 import jwt from "jwt-decode";
 import axios from "axios";
@@ -28,6 +28,15 @@ const FeedbackComponent = (props: any) => {
   const handleFeedbackMessage = (e: any) => {
     setFeedbackMessage(e.target.value);
   };
+
+  const onFeedbackSubmit = () => {
+    notification.success({
+      message: "Success",
+      description: "Feedback is submitted.",
+      duration: 2,
+    });
+  };
+
   const handleFeedbackSubmit = async () => {
     try {
       const response = await axios.post("http://127.0.0.1:8000/api/feedback", {
@@ -36,8 +45,11 @@ const FeedbackComponent = (props: any) => {
         message: feedbackMessage,
       });
       setIsFeedback(false);
+      onFeedbackSubmit();
     } catch (e) {}
   };
+
+  
 
   return (
     <React.Fragment>
