@@ -257,19 +257,19 @@ const PracticeBoard = () => {
                   </Row>
                 </Form>
 
-                <Row gutter={12} style={{ marginTop: "12px", paddingTop: "15px" }}>
-                  <Col xs={24} sm={3}>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <StyledButton onClick={handleMenu}>Menu</StyledButton>
-                  </Col>
-                  <Col xs={15} sm={4}>
+
                     <StyledButton disabled={isDisabled} onClick={handleCheckAnswer}>
                       Check Answer
                     </StyledButton>
-                  </Col>
-                  <Col xs={24} sm={14}>
+
                     <StyledButton onClick={handleNextQuestion}>Next Question</StyledButton>
-                  </Col>
-                  <Col xs={24} sm={3}>
+                  </div>
+                  <div>
                     <StyledButton
                       onClick={() => {
                         setIsFeedback(!isFeedback);
@@ -277,8 +277,8 @@ const PracticeBoard = () => {
                     >
                       Feedback
                     </StyledButton>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </QuestionContainer>
               <div style={{ marginTop: "30px" }}>
                 {isGetHelp && (
