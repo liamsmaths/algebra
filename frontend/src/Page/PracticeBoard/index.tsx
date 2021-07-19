@@ -108,11 +108,14 @@ const PracticeBoard = () => {
       });
       setHelp(response.data.help_text);
       if (response.data.is_correct) {
-        form.setFieldsValue({ userinput: "" });
+        // form.setFieldsValue({ userinput: "" });
         setCorrectPopover(true);
         setCorrect(correct + 1);
         setIsGetHelp(false);
-        handleNextQuestion();
+        setIsDisabled(true);
+        setDisableCheck(true);
+
+        // handleNextQuestion();
         onCorrectAttempt();
         if (correct === 5) {
           setIsCorrectFeedback(true);
