@@ -150,10 +150,10 @@ def GetHelp(request):
         algo = get_module(qs.algorithm.name, qs.algorithm.path)
         get_help = algo.get_help(question, answer, effort)
 
-        context = {
-            'get_help': get_help
-        }
-        json_data = JSONRenderer().render(context)
+        print(answer)
+        print(effort)
+        print(get_help)
+        json_data = JSONRenderer().render(get_help)
         return HttpResponse(json_data, content_type='application/json', status=200)
 
 

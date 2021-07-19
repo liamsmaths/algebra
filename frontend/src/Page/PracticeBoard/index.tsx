@@ -140,6 +140,13 @@ const PracticeBoard = () => {
       duration: 4,
     });
   };
+  const onFeedbackSubmit = () => {
+    notification.success({
+      message: "Success",
+      description: "Feedback is submitted.",
+      duration: 2,
+    });
+  };
 
   const handleCheckAnswer = () => {
     setTotalAttempts(totalAttempts + 1);
@@ -204,6 +211,7 @@ const PracticeBoard = () => {
         message: feedbackMessage,
       });
       setIsCorrectFeedback(false);
+      onFeedbackSubmit();
     } catch (e) {}
   };
 
