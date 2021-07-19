@@ -106,9 +106,23 @@ const PracticeBoard = () => {
         effort: inputAnswer,
         topic: id,
       });
-      console.log(response);
-      setHelp(response.data.get_help);
-      setIsGetHelp(true);
+      setHelp(response.data.help_text);
+      if (response.data.is_correct) {
+        form.setFieldsValue({ userinput: "" });
+        setCorrectPopover(true);
+        setCorrect(correct + 1);
+        setIsGetHelp(false);
+        handleNextQuestion();
+        onCorrectAttempt();
+        if (correct === 5) {
+          setIsCorrectFeedback(true);
+        }
+      } else {
+        setIsGetHelp(true);
+        setDisableCheck(true);
+        setIsDisabled(true);
+        onInCorrectAttempt();
+      }
     } catch (e) {}
   };
 
@@ -150,31 +164,13 @@ const PracticeBoard = () => {
 
   const handleCheckAnswer = () => {
     setTotalAttempts(totalAttempts + 1);
-    const inputAnswerStringify = inputAnswer.toString();
-    const correctAnswerStringify = allQuestions.data.answer.toString();
     getHelp();
-
-    // if (inputAnswerStringify === correctAnswerStringify) {
-    //   form.setFieldsValue({ userinput: "" });
-    //   setCorrectPopover(true);
-    //   setCorrect(correct + 1);
-    //   setIsGetHelp(false);
-    //   handleNextQuestion();
-    //   onCorrectAttempt();
-    //   if (correct === 5) {
-    //     setIsCorrectFeedback(true);
-    //   }
-    // } else {
-    //   getHelp();
-    //   setDisableCheck(true);
-    //   setIsDisabled(true);
-    //   onInCorrectAttempt();
-    // }
   };
 
   const handleNextQuestion = async () => {
     try {
       const response = await axios.get(`http://127.0.0.1:8000/api/getQuestion/${id}`);
+      setIsDisabled(true);
       setAllQuestions(response);
       setDisableCheck(false);
       setIsGetHelp(false);
