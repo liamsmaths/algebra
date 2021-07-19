@@ -18,14 +18,14 @@ const Wrapper = styled("div")`
 `;
 
 const Header = styled("div")`
-  height: 100px;
+  height: 75px;
   width: 100%;
   background-color: #6d60b0;
   padding: 0px 70px 0px 70px;
 `;
 
 const BodyContainer = styled("div")`
-  padding: 70px 70px 0px 70px;
+  padding: 40px 70px 0px 70px;
 `;
 
 const PracticeContainer = styled("div")`
@@ -106,9 +106,26 @@ const PracticeBoard = () => {
         effort: inputAnswer,
         topic: id,
       });
+      setHelp(response.data.help_text);
+      if (response.data.is_correct) {
+        // form.setFieldsValue({ userinput: "" });
+        setCorrectPopover(true);
+        setCorrect(correct + 1);
+        setIsGetHelp(false);
+        setIsDisabled(true);
+        setDisableCheck(true);
 
-      setHelp(response.data.get_help);
-      setIsGetHelp(true);
+        // handleNextQuestion();
+        onCorrectAttempt();
+        if (correct === 5) {
+          setIsCorrectFeedback(true);
+        }
+      } else {
+        setIsGetHelp(true);
+        setDisableCheck(true);
+        setIsDisabled(true);
+        onInCorrectAttempt();
+      }
     } catch (e) {}
   };
 
@@ -130,14 +147,14 @@ const PracticeBoard = () => {
     notification.success({
       message: "Correct",
       description: "Your answer is correct.",
-      duration: 2,
+      duration: 4,
     });
   };
   const onInCorrectAttempt = () => {
     notification.error({
       message: "Incorrect",
       description: "Your answer is incorrect. See the help section for correct answer.",
-      duration: 2,
+      duration: 4,
     });
   };
   const onFeedbackSubmit = () => {
@@ -150,31 +167,13 @@ const PracticeBoard = () => {
 
   const handleCheckAnswer = () => {
     setTotalAttempts(totalAttempts + 1);
-    const inputAnswerStringify = inputAnswer.toString();
-    const correctAnswerStringify = allQuestions.data.answer.toString();
-
-    if (inputAnswerStringify === correctAnswerStringify) {
-      form.setFieldsValue({ userinput: "" });      
-      setCorrectPopover(true);
-      setCorrect(correct + 1);   
-      setIsGetHelp(false);
-      handleNextQuestion();
-      onCorrectAttempt();
-      if (correct === 4) {
-        setIsCorrectFeedback(true);
-      }
-      
-    } else {
-      getHelp();
-      setDisableCheck(true);
-      setIsDisabled(true);
-      onInCorrectAttempt();
-    }
+    getHelp();
   };
 
   const handleNextQuestion = async () => {
     try {
       const response = await axios.get(`http://127.0.0.1:8000/api/getQuestion/${id}`);
+      setIsDisabled(true);
       setAllQuestions(response);
       setDisableCheck(false);
       setIsGetHelp(false);
@@ -202,7 +201,6 @@ const PracticeBoard = () => {
 
   const handleFeedbackMessage = (e: any) => {
     setFeedbackMessage(e.target.value);
-
   };
   const handleFeedbackSubmit = async () => {
     try {
@@ -267,19 +265,19 @@ const PracticeBoard = () => {
                   </Row>
                 </Form>
 
-                <Row gutter={12} style={{ marginTop: "12px", paddingTop: "15px" }}>
-                  <Col xs={24} sm={3}>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <StyledButton onClick={handleMenu}>Menu</StyledButton>
-                  </Col>
-                  <Col xs={15} sm={4}>
+
                     <StyledButton disabled={isDisabled} onClick={handleCheckAnswer}>
                       Check Answer
                     </StyledButton>
-                  </Col>
-                  <Col xs={24} sm={14}>
+
                     <StyledButton onClick={handleNextQuestion}>Next Question</StyledButton>
-                  </Col>
-                  <Col xs={24} sm={3}>
+                  </div>
+                  <div>
                     <StyledButton
                       onClick={() => {
                         setIsFeedback(!isFeedback);
@@ -287,8 +285,8 @@ const PracticeBoard = () => {
                     >
                       Feedback
                     </StyledButton>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </QuestionContainer>
               <div style={{ marginTop: "30px" }}>
                 {isGetHelp && (

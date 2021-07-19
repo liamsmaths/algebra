@@ -10,7 +10,7 @@ const Wrapper = styled("div")`
 `;
 
 const Header = styled("div")`
-  height: 100px;
+  height: 75px;
   width: 100%;
   background-color: #6d60b0;
   padding: 0px 70px 0px 70px;
