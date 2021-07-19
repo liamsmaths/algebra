@@ -11,7 +11,7 @@ const IconFont = createFromIconfontCN({
 });
 
 const Wrapper = styled("div")`
-  padding: 27px 12px 0px 12px;
+  padding: 18px 12px 0px 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -33,7 +33,7 @@ const HeaderComponent = () => {
   return (
     <Wrapper>
       <Text
-        style={{ fontSize: "26px", color: "white", textTransform: "uppercase", letterSpacing: 2 }}
+        style={{ fontSize: "24px", color: "white", textTransform: "uppercase", letterSpacing: 2 }}
       >
         Algebra Guide
       </Text>

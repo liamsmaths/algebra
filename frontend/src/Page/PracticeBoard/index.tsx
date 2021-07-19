@@ -18,14 +18,14 @@ const Wrapper = styled("div")`
 `;
 
 const Header = styled("div")`
-  height: 100px;
+  height: 75px;
   width: 100%;
   background-color: #6d60b0;
   padding: 0px 70px 0px 70px;
 `;
 
 const BodyContainer = styled("div")`
-  padding: 70px 70px 0px 70px;
+  padding: 40px 70px 0px 70px;
 `;
 
 const PracticeContainer = styled("div")`
@@ -106,7 +106,7 @@ const PracticeBoard = () => {
         effort: inputAnswer,
         topic: id,
       });
-
+      console.log(response);
       setHelp(response.data.get_help);
       setIsGetHelp(true);
     } catch (e) {}
@@ -130,14 +130,14 @@ const PracticeBoard = () => {
     notification.success({
       message: "Correct",
       description: "Your answer is correct.",
-      duration: 2,
+      duration: 4,
     });
   };
   const onInCorrectAttempt = () => {
     notification.error({
       message: "Incorrect",
       description: "Your answer is incorrect. See the help section for correct answer.",
-      duration: 2,
+      duration: 4,
     });
   };
 
@@ -145,23 +145,24 @@ const PracticeBoard = () => {
     setTotalAttempts(totalAttempts + 1);
     const inputAnswerStringify = inputAnswer.toString();
     const correctAnswerStringify = allQuestions.data.answer.toString();
+    getHelp();
 
-    if (inputAnswerStringify === correctAnswerStringify) {
-      form.setFieldsValue({ userinput: "" });
-      setCorrectPopover(true);
-      setCorrect(correct + 1);
-      setIsGetHelp(false);
-      handleNextQuestion();
-      onCorrectAttempt();
-      if (correct === 5) {
-        setIsCorrectFeedback(true);
-      }
-    } else {
-      getHelp();
-      setDisableCheck(true);
-      setIsDisabled(true);
-      onInCorrectAttempt();
-    }
+    // if (inputAnswerStringify === correctAnswerStringify) {
+    //   form.setFieldsValue({ userinput: "" });
+    //   setCorrectPopover(true);
+    //   setCorrect(correct + 1);
+    //   setIsGetHelp(false);
+    //   handleNextQuestion();
+    //   onCorrectAttempt();
+    //   if (correct === 5) {
+    //     setIsCorrectFeedback(true);
+    //   }
+    // } else {
+    //   getHelp();
+    //   setDisableCheck(true);
+    //   setIsDisabled(true);
+    //   onInCorrectAttempt();
+    // }
   };
 
   const handleNextQuestion = async () => {
