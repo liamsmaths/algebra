@@ -117,7 +117,7 @@ const PracticeBoard = () => {
 
         // handleNextQuestion();
         onCorrectAttempt();
-        if (correct === 5) {
+        if (correct === 4) {
           setIsCorrectFeedback(true);
         }
       } else {

@@ -2,6 +2,7 @@ from json import JSONEncoder
 from functools import partial
 from os import stat
 from django.shortcuts import render
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
@@ -18,6 +19,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from django.db import connection
+from django.utils.timezone import datetime
 
 # @csrf_exempt
 # def signup(request):
@@ -149,10 +151,6 @@ def GetHelp(request):
         qs = Topic.objects.get(id=topic)
         algo = get_module(qs.algorithm.name, qs.algorithm.path)
         get_help = algo.get_help(question, answer, effort)
-
-        print(answer)
-        print(effort)
-        print(get_help)
         json_data = JSONRenderer().render(get_help)
         return HttpResponse(json_data, content_type='application/json', status=200)
 
@@ -193,8 +191,10 @@ def SubmitResult(request):
             current_correct = serializer.data['correct_answer']
             current_progress = (current_correct/5) * 100
 
+            date_now = timezone.now()
             if previous_progress >= current_progress:
-
+                qs.last_attempt = date_now.date()
+                qs.save()
                 context = {
                     'msg': 'Result has been updated.'
                 }
@@ -205,7 +205,7 @@ def SubmitResult(request):
             qs.has_passed = serializer.data['has_passed']
             qs.correct_answer = serializer.data['correct_answer']
             qs.time_taken = serializer.data['time_taken']
-
+            qs.last_attempt = date_now.now()
             qs.save()
 
             context = {

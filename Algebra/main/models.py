@@ -1,6 +1,7 @@
 from os import stat
 from django.db import models
 from django.contrib.auth.hashers import make_password
+from django.utils import timezone
 
 
 class Student(models.Model):
@@ -46,7 +47,7 @@ class StudentTopic(models.Model):
     correct_answer = models.IntegerField()
     total_attempts = models.IntegerField(null=True, blank=True)
     time_taken = models.CharField(max_length=200)
-    last_attempt = models.DateTimeField(auto_now_add=True)
+    last_attempt = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return str(self.student.name) + " " + str(self.topic.name)
