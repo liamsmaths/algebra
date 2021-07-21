@@ -83,6 +83,7 @@ const PracticeBoard = () => {
   const [isFeedback, setIsFeedback] = useState<boolean>(false);
   const [isCorrectfeedback, setIsCorrectFeedback] = useState<boolean>(false);
   const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [nextQuestionDisable, setNextQuestionDisable] = useState<boolean>(false);
 
   const [form] = useForm();
 
@@ -119,6 +120,7 @@ const PracticeBoard = () => {
         onCorrectAttempt();
         if (correct === 4) {
           setIsCorrectFeedback(true);
+          setNextQuestionDisable(true);
         }
       } else {
         setIsGetHelp(true);
@@ -275,7 +277,7 @@ const PracticeBoard = () => {
                       Check Answer
                     </StyledButton>
 
-                    <StyledButton onClick={handleNextQuestion}>Next Question</StyledButton>
+                    <StyledButton disabled={nextQuestionDisable} onClick={handleNextQuestion}>Next Question</StyledButton>
                   </div>
                   <div>
                     <StyledButton
