@@ -83,7 +83,7 @@ const PracticeBoard = () => {
   const [isFeedback, setIsFeedback] = useState<boolean>(false);
   const [isCorrectfeedback, setIsCorrectFeedback] = useState<boolean>(false);
   const [feedbackMessage, setFeedbackMessage] = useState("");
-  const [nextQuestionDisable, setNextQuestionDisable] = useState<boolean>(false);
+  const [nextQuestionDisable, setNextQuestionDisable] = useState<boolean>(true);
 
   const [form] = useForm();
 
@@ -107,6 +107,7 @@ const PracticeBoard = () => {
         effort: inputAnswer,
         topic: id,
       });
+      setNextQuestionDisable(false);
       setHelp(response.data.help_text);
       if (response.data.is_correct) {
         // form.setFieldsValue({ userinput: "" });
@@ -170,6 +171,7 @@ const PracticeBoard = () => {
   const handleCheckAnswer = () => {
     setTotalAttempts(totalAttempts + 1);
     getHelp();
+    
   };
 
   const handleNextQuestion = async () => {
@@ -179,6 +181,7 @@ const PracticeBoard = () => {
       setAllQuestions(response);
       setDisableCheck(false);
       setIsGetHelp(false);
+      setNextQuestionDisable(true);
       form.setFieldsValue({ userinput: "" });
     } catch (e) {}
   };
