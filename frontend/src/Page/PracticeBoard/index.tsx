@@ -42,7 +42,7 @@ const QuestionContainer = styled("div")`
 `;
 
 const InstructionContainer = styled("div")`
-  padding: 30px;
+  padding: 20px;
   box-shadow: 0 4px 6px rgb(0 0 0 / 10%), 0 1px 3px rgb(0 0 0 / 10%);
   background-color: #fff;
   border-radius: 4px;
@@ -149,8 +149,9 @@ const PracticeBoard = () => {
   const onCorrectAttempt = () => {
     notification.success({
       message: "Correct",
-      description: "Your answer is correct.",
+      description: "Your answer is correct. ",  /* ??? maybe add in how many qs left to do */
       duration: 4,
+
     });
   };
   const onInCorrectAttempt = () => {
@@ -158,12 +159,13 @@ const PracticeBoard = () => {
       message: "Incorrect",
       description: "Your answer is incorrect. See the help section for correct answer.",
       duration: 4,
+
     });
   };
   const onFeedbackSubmit = () => {
     notification.success({
-      message: "Success",
-      description: "Feedback is submitted.",
+      message: "Thanks",
+      description: "Your feedback is submitted.",
       duration: 2,
     });
   };
@@ -257,14 +259,14 @@ const PracticeBoard = () => {
 
                     <Col xs={24} sm={24} md={7}>
                       <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-                        <Text style={{ fontSize: "18px", fontWeight: 600 }}>Correct</Text>
-                        <Text style={{ fontSize: "18px", fontWeight: 600 }}>{correct}</Text>
+                        <Text style={{ fontSize: "18px", fontWeight: 600,textAlign: 'center' }}>Correct</Text>
+                        <Text style={{ fontSize: "18px", fontWeight: 600,textAlign: 'center' }}>{correct}</Text>
                       </div>
                     </Col>
                     <Col xs={24} sm={24} md={7}>
                       <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
-                        <Text style={{ fontSize: "18px", fontWeight: 600 }}>Total Attempts</Text>
-                        <Text style={{ fontSize: "18px", fontWeight: 600 }}>{totalAttempts}</Text>
+                        <Text style={{ fontSize: "18px", fontWeight: 600,textAlign: 'center' }}>Attempts</Text>
+                        <Text style={{ fontSize: "18px", fontWeight: 600,textAlign: 'center' }}>{totalAttempts}</Text>
                       </div>
                     </Col>
                   </Row>
@@ -340,9 +342,9 @@ const PracticeBoard = () => {
               <Modal
                 title={
                   <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                    <Text>Congratulations !</Text>
+                    <Text>Well done !</Text>
                     <Text style={{ fontSize: "15px" }}>
-                      You have successfully completed the target.
+                      You have successfully completed this exercise.
                     </Text>
                   </div>
                 }
@@ -354,7 +356,7 @@ const PracticeBoard = () => {
                   </StyledButton>,
                 ]}
               >
-                <Text style={{ fontSize: "15px" }}>Leave us your Feedback</Text>
+                <Text style={{ fontSize: "15px" }}>Tell us what you thought of this exercise</Text>
                 <TextArea rows={5} style={{ marginTop: "15px" }} onChange={handleFeedbackMessage} />
               </Modal>
             </Col>

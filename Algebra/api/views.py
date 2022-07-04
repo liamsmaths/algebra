@@ -194,6 +194,7 @@ def SubmitResult(request):
             date_now = timezone.now()
             if previous_progress >= current_progress:
                 qs.last_attempt = date_now.date()
+                qs.total_attempts = serializer.data['total_attempts']
                 qs.save()
                 context = {
                     'msg': 'Result has been updated.'

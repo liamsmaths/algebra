@@ -1,6 +1,8 @@
 
 import random
 
+from rest_framework import response
+
 #
 # this function generates a question : adding 2 and 3 like terms with some subtraction
 #  but answer always positive
@@ -11,8 +13,11 @@ def get_question():
     global question, answer
 
     q_list = ("x+2x", "3y+4y", "3a+a", "3p+2p", "2x+4x-3x",
-              "5x-2x+x", "4a+2a-3a", "2q+3q", "4c-c+2c")
-    ans_list = ("3x", "7y", "4a", "5p", "3x", "4x", "3a", "5q", "5c")
+              "5x-2x+x", "4a+2a-3a", "2q+3q", "4c-c+2c", "3c+3c-c",
+              "q+q+2q", "p+10p-3p","a-a","6c-c","2a+3a")
+    ans_list = ("3x", "7y", "4a", "5p", "3x", 
+                "4x", "3a", "5q", "5c","5c",
+                "4q","8p","0", "5c","5a")
 
     length = len(q_list)
     choice = random.randrange(0, length)

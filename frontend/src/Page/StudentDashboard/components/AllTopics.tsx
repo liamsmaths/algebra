@@ -29,6 +29,7 @@ const StyledTable = styled(Table)`
     border-radius: 10px !important;
     box-shadow: 1px 1px 10px #1c3faa1a !important;
     background-color: white;
+    textAlign: 'center';
   }
 
   .ant-pagination-item,
@@ -105,7 +106,7 @@ const AllTopics = () => {
       ),
     },
     {
-      title: "Total Attempt",
+      title: "Questions Attempted",
       dataIndex: "total_attempts",
       key: "total_attempts",
     },
